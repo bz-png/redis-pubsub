@@ -1,0 +1,51 @@
+// cSpell Settings
+{
+  // Version of the setting file.  Always 0.2
+  "version": "0.2",
+  // language - current active spelling language
+  "language": "en",
+  // words - list of words to be always considered correct
+  "words": [
+    "camelcase",
+    "codepaths",
+    "dockerignore",
+    "githubusercontent",
+    "gitmodules",
+    "linebreak",
+    "mkdirp",
+    "npmrc",
+    "Parens",
+    "streetsidesoftware",
+    "tsbuildinfo",
+    "tsdoc",
+    "tsmerge",
+    "visualstudio",
+    "vsmarketplacebadge"
+  ],
+  "ignoreWords": [
+    "ssoisno",
+    "authcode",
+    "EITOKEN",
+    "tokenvalidation",
+    "pwdresetemail",
+    "Maxnerva",
+    "ESOP"
+  ],
+  "ignorePaths": [
+    "**/package-lock.json",
+    "**/node_modules/**",
+    "**/vscode-extension/**",
+    "**/.git/objects/**",
+    "**/dist/**",
+    "*.tgz",
+    ".vscode",
+    "tsdoc",
+    ".gitignore",
+    ".gitmodules",
+    ".dockerignore",
+    "docker.npmrc",
+    "**/generated/graphql.ts",
+    "coverage"
+  ],
+  "enabled": true
+}

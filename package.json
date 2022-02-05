@@ -1,0 +1,62 @@
+{
+  "name": "ifp-project",
+  "version": "0.0.1",
+  "description": "",
+  "private": true,
+  "main": "dist/app.js",
+  "bin": {
+    "app": "dist/app.js"
+  },
+  "config": {
+    "main": "dist/app.js"
+  },
+  "files": [
+    "dist/"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "build-clean": "rimraf dist && tsc --incremental false",
+    "cspell": "cspell \"**\"",
+    "lint": "eslint src ./*.js --ext js,ts",
+    "start": "cross-env-shell \"node $npm_package_config_main\" || node $npm_package_config_main",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "prepare": "husky install"
+  },
+  "author": "",
+  "license": "UNLICENSED",
+  "engines": {
+    "node": "^16.13.0"
+  },
+  "devDependencies": {
+    "@types/node": "^17.0.14",
+    "@typescript-eslint/eslint-plugin": "^5.10.2",
+    "@typescript-eslint/parser": "^5.10.2",
+    "cross-env": "^7.0.3",
+    "cspell": "^5.18.0",
+    "eslint": "^8.8.0",
+    "eslint-config-google": "^0.14.0",
+    "eslint-config-prettier": "^8.3.0",
+    "eslint-plugin-mocha": "^10.0.3",
+    "husky": "^7.0.4",
+    "import-sort-style-module": "^6.0.0",
+    "lint-staged": "^12.3.3",
+    "prettier": "^2.5.1",
+    "prettier-plugin-import-sort": "^0.0.7",
+    "rimraf": "^3.0.2",
+    "typescript": "^4.5.5"
+  },
+  "importSort": {
+    ".js, .jsx, .ts, .tsx": {
+      "style": "module",
+      "parser": "typescript"
+    }
+  },
+  "lint-staged": {
+    "*": "cspell lint --no-must-find-files",
+    "*.{html,css,scss,json}": "prettier --write",
+    "*.{js,jsx,ts,tsx}": [
+      "eslint",
+      "prettier --check"
+    ]
+  }
+}
