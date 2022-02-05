@@ -1,5 +1,9 @@
 import { userInfo } from 'os';
 
+import { ApolloClient, InMemoryCache, gql } from '@apollo/client/core';
+import { BatchHttpLink } from '@apollo/client/link/batch-http';
+import fetch from 'cross-fetch';
+
 /** this module (.js) run as entry point `process.argv[1]` */
 if (require.main === module) {
   main();
@@ -39,4 +43,32 @@ async function main() {
     'process.versions': process.versions,
     'os.userInfo()': userInfo(),
   });
+
+  await runApolloClient();
+}
+
+async function runApolloClient() {
+  const client = new ApolloClient({
+    link: new BatchHttpLink({
+      uri: 'https://48p1r2roz4.sse.codesandbox.io',
+      fetch,
+    }),
+    cache: new InMemoryCache(),
+  });
+
+  try {
+    const result = await client.query({
+      query: gql`
+        query GetRates {
+          rates(currency: "USD") {
+            currency
+          }
+        }
+      `,
+    });
+
+    console.log('runApolloClient', result.data);
+  } catch (err) {
+    console.error('runApolloClient error', err);
+  }
 }
