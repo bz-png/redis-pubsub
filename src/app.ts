@@ -47,27 +47,109 @@ async function main() {
   await runApolloClient();
 }
 
+// =========================== Q U E R Y =============== //
+function addFormulas(a: string, b: string) {
+  const addFormulasQuery = gql`
+    mutation {
+      addFormulas(
+        input: {
+          formulas: [
+            {
+              operator: Add
+              operandLKind: Variable
+              operandLVar: "${a}"
+              operandRKind: Variable
+              operandRVar: "${b}"
+            }
+          ]
+        }
+      ) {
+        formulas {
+          id
+        }
+      }
+    }
+  `;
+  return addFormulasQuery;
+  // console.log(addFormulas)
+}
+
+function add(a: number, b: number, id: string) {
+  const addQuery = gql`
+    query {
+        calculateFormula(
+          id: "${id}"
+          variables: { a: ${a}, b: ${b} }
+        ) {
+          result
+          resultText
+          formulaText
+          variables
+        }
+      }
+    `;
+  return addQuery;
+  // console.log(addFormulas)
+}
+
+function remove(id: string) {
+  const addQuery = gql`
+      mutation {
+          removeFormulasByRoot(
+            input: {
+              id:"${id}"
+            }
+          ){
+            removedCount
+          }
+        }
+      `;
+  return addQuery;
+  // console.log(addFormulas)
+}
+// =====================================================//
+
 async function runApolloClient() {
   const client = new ApolloClient({
     link: new BatchHttpLink({
-      uri: 'https://48p1r2roz4.sse.codesandbox.io',
+      // uri: 'https://48p1r2roz4.sse.codesandbox.io',
+      uri: 'http://localhost:20001/graphql',
       fetch,
     }),
     cache: new InMemoryCache(),
   });
 
   try {
-    const result = await client.query({
-      query: gql`
-        query GetRates {
-          rates(currency: "USD") {
-            currency
-          }
-        }
-      `,
+    // Create Add Formula
+    let data = addFormulas('a', 'b');
+    let result = await client.mutate({
+      mutation: data,
     });
+    let json = JSON.stringify(result.data);
+    let obj = JSON.parse(json);
+    const id = obj.addFormulas.formulas[0].id;
+    console.log('Add Formula created with id=', id);
 
-    console.log('runApolloClient', result.data);
+    // Calculation
+    data = add(1, 2, id);
+    result = await client.query({
+      query: data,
+    });
+    json = JSON.stringify(result.data);
+    obj = JSON.parse(json);
+    result = obj.calculateFormula.result;
+    console.log('Calculation result = ', result);
+
+    // remove formula
+    data = remove(id);
+    result = await client.mutate({
+      mutation: data,
+    });
+    json = JSON.stringify(result.data);
+    obj = JSON.parse(json);
+    result = obj.removeFormulasByRoot.removedCount;
+    if (result == 0) console.log('addFormula with id =', id, 'already removed');
+    if (result == 1) console.log('addFormula with id =', id, 'removed');
   } catch (err) {
     console.error('runApolloClient error', err);
   }
