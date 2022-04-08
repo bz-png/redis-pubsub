@@ -21,7 +21,8 @@
     "start": "cross-env-shell \"node $npm_package_config_main\" || node $npm_package_config_main",
     "test": "echo \"Error: no test specified\" && exit 1",
     "prepare": "husky install",
-    "dev": "concurrently \"tsc -w\" \"nodemon dist/app.js\""
+    "dev": "concurrently \"tsc -w\" \"nodemon dist/app.js\"",
+    "sub": "concurrently \"tsc -w\" \"nodemon dist/subscribe.js\""
   },
   "author": "",
   "license": "UNLICENSED",
